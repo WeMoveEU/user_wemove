@@ -1,0 +1,67 @@
+<?php
+
+function user_wemove_init(){
+  global $user;
+
+  if(_checkCampaignerRole() && _checkUserPath()){
+    if (user_is_logged_in()) {
+      drupal_goto('user/'.$user->uid.'/edit');
+    } else {
+      drupal_goto('user/login');
+    }
+  }
+}
+
+function user_wemove_menu_local_tasks_alter(&$data) {
+   global $user;
+   
+   if(_checkCampaignerRole() && (current_path() === "user/".$user->uid."/edit")){
+
+     foreach ($data['tabs'] as $key => $value) {
+       foreach($value['output'] as $tab_index => $tab) {
+         if (substr($tab['#link']['path'],0,6) === 'user/%') {
+           unset($data['tabs'][0]['output'][$key]);
+         }
+       }
+     }
+  }
+
+}
+
+
+function user_wemove_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id === 'user_profile_form' && _checkCampaignerRole()) {
+
+    hide($form['account']['name']);
+    hide($form['account']['mail']);
+    hide($form['account']['status']);
+    hide($form['account']['roles']);
+    hide($form['account']['notify']);
+    hide($form['picture']);
+    
+    unset($form['locale']);
+  }
+}
+
+function user_wemove_form_user_profile_form_alter(&$form,$form_state,$form_id){
+
+}
+
+
+function _checkCampaignerRole() {
+  global $user;
+  return (array_key_exists("9",$user->roles));
+}
+
+
+function _checkUserPath() {
+  global $user;
+  $path = current_path();
+  $pathRegLength = strlen((string) $user->uid) + 5;
+
+  return ($path === "user" ||
+          $path === "user/".$user->uid ||
+          $path === "user/".$user->uid."/view" ||
+          $path === "user/".$user->uid."/edit/name_and_address");
+}
+

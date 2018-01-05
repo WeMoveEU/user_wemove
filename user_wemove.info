@@ -1,0 +1,4 @@
+name = User WeMove
+description = Add extra features related to user
+core = 7.x
+package = Other
