@@ -31,7 +31,7 @@ function user_wemove_menu_local_tasks_alter(&$data) {
 
 function user_wemove_form_alter(&$form, &$form_state, $form_id) {
   if($form_id === 'user_profile_form' && _checkCampaignerRole()) {
-
+   
     hide($form['account']['name']);
     hide($form['account']['mail']);
     hide($form['account']['status']);
@@ -40,6 +40,11 @@ function user_wemove_form_alter(&$form, &$form_state, $form_id) {
     hide($form['picture']);
     
     unset($form['locale']);
+
+    if(array_key_exists('account',$form) && array_key_exists('current_pass',$form['account'])) {
+        $descr = str_replace('<em class="placeholder">E-mail address</em> or','',$form['account']['current_pass']['#description']);
+        $form['account']['current_pass']['#description'] = $descr;
+    }
   }
 }
 
