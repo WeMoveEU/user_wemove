@@ -1,17 +1,27 @@
 <?php
 
+if (!defined('__DIR__')) {define('__DIR__', dirname(__FILE__));}
+require_once __DIR__ . '/user_wemove.admin.inc';
+
+
+/**
+ * Redirection (for users with campaigner role/ so logged in):
+ * to edit user profile page 
+ * from every others user profile pages
+ */
 function user_wemove_init(){
   global $user;
 
-  if(_checkCampaignerRole() && _checkUserPath()){
-    if (user_is_logged_in()) {
+  if(user_is_logged_in() && _checkCampaignerRole() && _checkUserPath()){
       drupal_goto('user/'.$user->uid.'/edit');
-    } else {
-      drupal_goto('user/login');
-    }
   }
 }
 
+
+/**
+ * Customize the tabs on user profile pages (for users with campaigner role):
+ * - Hide every tab with the link related with user profiles pages
+ */
 function user_wemove_menu_local_tasks_alter(&$data) {
    global $user;
    
@@ -25,10 +35,21 @@ function user_wemove_menu_local_tasks_alter(&$data) {
        }
      }
   }
-
 }
 
 
+/**
+ * Customize the user profile form (for users with campaigner role):
+ * - Hide: 
+ *   -- login control
+ *   -- mail control
+ *   -- status control
+ *   -- roles control
+ *   -- notify control
+ *   -- picture control
+ *   -- time control
+ * - Change password desription
+ */
 function user_wemove_form_alter(&$form, &$form_state, $form_id) {
   if($form_id === 'user_profile_form' && _checkCampaignerRole()) {
    
@@ -48,17 +69,28 @@ function user_wemove_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
-function user_wemove_form_user_profile_form_alter(&$form,$form_state,$form_id){
-
-}
-
-
+/**
+ * Check if logged in user has campaigner role
+ * configured in module configuration form
+ *
+ * Return: False/True 
+ */
 function _checkCampaignerRole() {
   global $user;
-  return (array_key_exists("9",$user->roles));
+  $role_name = variable_get('user_wemove__ymu_user_role_name', NULL);
+
+  $role = user_role_load_by_name($role_name);
+  $rid = $role->rid;
+
+  return (array_key_exists($rid,$user->roles));
 }
 
 
+/**
+ * Check current path if it's related to user profile pages
+ *
+ * Return: False/True
+ */
 function _checkUserPath() {
   global $user;
   $path = current_path();

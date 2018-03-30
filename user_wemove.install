@@ -1,0 +1,23 @@
+<?php
+
+function user_wemove_install() {
+
+  /************************/
+  /***** YouMove Part *****/
+  /************************/
+
+  variable_set('user_wemove__ymu_user_role_name',null);
+
+}
+
+function user_wemove_uninstall() { 
+
+  /************************/
+  /***** YouMove Part *****/
+  /************************/
+
+  watchdog('User YouMove Module','Uninstalling module');
+  variable_del('user_wemove__ymu_user_role_name');
+
+}
+
