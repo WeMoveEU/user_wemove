@@ -69,6 +69,7 @@ function user_wemove_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+
 /**
  * Check if logged in user has campaigner role
  * configured in module configuration form
