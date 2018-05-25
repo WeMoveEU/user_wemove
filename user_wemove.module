@@ -69,6 +69,13 @@ function user_wemove_form_alter(&$form, &$form_state, $form_id) {
         $form['account']['current_pass']['#description'] = $descr;
     }
   }
+
+  if($form_id === 'user_login') {
+
+    $form['name']['#title'] = t('E-mail');
+    $form['name']['#description'] = NULL;
+
+  }
 }
 
 
