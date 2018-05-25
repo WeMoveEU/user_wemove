@@ -49,6 +49,13 @@ function user_wemove_menu_local_tasks_alter(&$data) {
  *   -- picture control
  *   -- time control
  * - Change password desription
+ *
+ * Customize the user login form:
+ * - Change label for 'Username' control
+ * - Hide description for 'Username' control
+ *
+ * Customize the user password form:
+ * - Change label for 'Username or e-mail' control
  */
 function user_wemove_form_alter(&$form, &$form_state, $form_id) {
   if($form_id === 'user_profile_form' && _checkCampaignerRole()) {
@@ -74,6 +81,12 @@ function user_wemove_form_alter(&$form, &$form_state, $form_id) {
 
     $form['name']['#title'] = t('E-mail');
     $form['name']['#description'] = NULL;
+
+  }
+
+  if($form_id === 'user_pass') {
+
+    $form['name']['#title'] = t('E-mail');
 
   }
 }
