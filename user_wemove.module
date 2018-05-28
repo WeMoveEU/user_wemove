@@ -92,6 +92,29 @@ function user_wemove_form_alter(&$form, &$form_state, $form_id) {
 }
 
 
+
+/**
+ * Customize the user login form (for users with campaigner role):
+ */
+function user_wemove_form_user_login_alter(&$form, &$form_state, $form_id){
+  $form['#submit'][] = '_user_login_submit';
+}
+
+
+/** 
+  * Perform redirects. 
+  */
+function _user_login_submit(&$form, &$form_state) {
+  if(_checkCampaignerRole()) {
+    $destination = variable_get('user_wemove__ymu_login_redirect_destination', NULL);
+    if($destination) {
+      drupal_goto($destination);      
+    }
+  }
+}
+
+
+
 /**
  * Check if logged in user has campaigner role
  * configured in module configuration form

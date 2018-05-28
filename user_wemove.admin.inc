@@ -23,6 +23,13 @@ function user_wemove_admin_settings_form($form, &$form_state) {
     '#default_value' => variable_get('user_wemove__ymu_user_role_name'),
     '#required' => TRUE,
   );
+  
+  $form['ymu_login_redirect_destination'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Login redirect destination url'),
+    '#default_value' => variable_get('user_wemove__ymu_login_redirect_destination'),
+    '#required' => TRUE,
+  );
 
   $form['#submit'][] = '_ymu_admin_settings_submit';
 
@@ -31,4 +38,5 @@ function user_wemove_admin_settings_form($form, &$form_state) {
 
 function _ymu_admin_settings_submit($form, $form_state) {
   variable_set('user_wemove__ymu_user_role_name',$form_state['values']['ymu_user_role_name']);
+  variable_set('user_wemove__ymu_login_redirect_destination',$form_state['values']['ymu_login_redirect_destination']); 
 }
