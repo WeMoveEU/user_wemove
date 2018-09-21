@@ -59,12 +59,12 @@ function user_wemove_menu_local_tasks_alter(&$data) {
  */
 function user_wemove_form_alter(&$form, &$form_state, $form_id) {
   if($form_id === 'user_profile_form' && _checkCampaignerRole()) {
-   
-    hide($form['account']['name']);
+    
+    /*hide($form['account']['name']);*/
     hide($form['account']['mail']);
-    hide($form['account']['status']);
-    hide($form['account']['roles']);
-    hide($form['account']['notify']);
+    /*hide($form['account']['status']);*/
+    /*hide($form['account']['roles']);*/
+    /*hide($form['account']['notify']);*/
     hide($form['picture']);
     
     unset($form['locale']);
@@ -118,6 +118,7 @@ function _user_login_submit(&$form, &$form_state) {
 /**
  * Check if logged in user has campaigner role
  * configured in module configuration form
+ * and ONLY that role (with default 'authenticated user' role)
  *
  * Return: False/True 
  */
@@ -128,7 +129,7 @@ function _checkCampaignerRole() {
   $role = user_role_load_by_name($role_name);
   $rid = $role->rid;
 
-  return (array_key_exists($rid,$user->roles));
+  return ((sizeof($user->roles) == 2) && array_key_exists($rid,$user->roles));
 }
 
 
